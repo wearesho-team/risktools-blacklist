@@ -92,7 +92,10 @@ class FactoryTest extends TestCase
                                 'added_at' => '2023-08-01T12:00:00+00:00'
                             ],
                             'errors' => [
-                                'category' => ['Must be one of: military, claim, fraud, circle, dead, gaming, incapable, writeoff, inadequate, addict, lost_docs, self, other.']
+                                'category' => [
+                                    'Must be one of: military, claim, fraud, circle, dead, gaming, incapable, '
+                                    . 'writeoff, inadequate, addict, lost_docs, self, other.'
+                                ]
                             ]
                         ]
                     ]
@@ -104,7 +107,10 @@ class FactoryTest extends TestCase
                         'category' => Category::OTHER,
                         'added_at' => '2023-08-01T12:00:00+00:00',
                         'errors' => [
-                            'category' => ['Must be one of: military, claim, fraud, circle, dead, gaming, incapable, writeoff, inadequate, addict, lost_docs, self, other.']
+                            'category' => [
+                                'Must be one of: military, claim, fraud, circle, dead, gaming, incapable, '
+                                . 'writeoff, inadequate, addict, lost_docs, self, other.'
+                            ]
                         ]
                     ]
                 ]
