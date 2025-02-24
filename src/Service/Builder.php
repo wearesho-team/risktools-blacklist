@@ -22,8 +22,7 @@ class Builder
     public static function create(
         ?ConfigInterface $config = null,
         ?GuzzleHttp\ClientInterface $httpClient = null
-    ): self
-    {
+    ): self {
         return new self($config, $httpClient);
     }
 
