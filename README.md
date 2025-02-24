@@ -4,6 +4,7 @@
 [![Total Downloads](https://poser.pugx.org/wearesho-team/risktools-blacklist/downloads)](https://packagist.org/packages/wearesho-team/risktools-blacklist)
 [![License](https://poser.pugx.org/wearesho-team/risktools-blacklist/license)](https://packagist.org/packages/wearesho-team/risktools-blacklist)
 [![PHP Tests & Linting](https://github.com/wearesho-team/risktools-blacklist/actions/workflows/php.yml/badge.svg)](https://github.com/wearesho-team/risktools-blacklist/actions/workflows/php.yml)
+[![codecov](https://codecov.io/gh/wearesho-team/risktools-blacklist/graph/badge.svg?token=MMoTe9cS9A)](https://codecov.io/gh/wearesho-team/risktools-blacklist)
 
 Реалізація SDK для API RiskTools Blacklist.
 
