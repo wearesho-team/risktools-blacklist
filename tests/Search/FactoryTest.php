@@ -62,9 +62,7 @@ class FactoryTest extends TestCase
         $this->assertNull($record->phone());
     }
 
-    /**
-     * @dataProvider invalidRecordDataProvider
-     */
+    #[DataProvider('invalidRecordDataProvider')]
     public function testCreateRecordWithInvalidData(
         array $data,
         string $expectedMessage
