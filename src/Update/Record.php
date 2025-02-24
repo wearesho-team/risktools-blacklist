@@ -11,7 +11,7 @@ class Record
 {
     private function __construct(
         private readonly Category $category,
-        private readonly DateTimeImmutable $addedAt,
+        private readonly ?DateTimeImmutable $addedAt = null,
         private readonly ?string $ipn = null,
         private readonly ?string $phone = null,
     ) {
@@ -25,7 +25,7 @@ class Record
     public static function withPhone(
         string $phone,
         Category $category,
-        DateTimeImmutable $addedAt
+        ?DateTimeImmutable $addedAt = null
     ): self {
         return new self(
             category: $category,
@@ -37,7 +37,7 @@ class Record
     public static function withIpn(
         string $ipn,
         Category $category,
-        DateTimeImmutable $addedAt
+        ?DateTimeImmutable $addedAt = null
     ): self {
         return new self(
             category: $category,
@@ -50,7 +50,7 @@ class Record
         string $phone,
         string $ipn,
         Category $category,
-        DateTimeImmutable $addedAt
+        ?DateTimeImmutable $addedAt = null
     ): self {
         return new self(
             category: $category,
@@ -84,7 +84,6 @@ class Record
     {
         $data = [
             'category' => $this->category->value,
-            'added_at' => $this->addedAt->format('c'),
         ];
 
         if ($this->ipn !== null) {
@@ -93,6 +92,10 @@ class Record
 
         if ($this->phone !== null) {
             $data['phone'] = $this->phone;
+        }
+
+        if ($this->addedAt !== null) {
+            $data['added_at'] = $this->addedAt->format('c');
         }
 
         return $data;
