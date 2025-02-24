@@ -16,12 +16,13 @@ class RequestTest extends TestCase
 
     #[DataProvider('validRequestDataProvider')]
     public function testValidRequest(
-        Request $request,
+        \Closure $createRequest,
         ?string $expectedPhone,
         ?string $expectedIpn,
         array $expectedCategories,
         array $expectedArray
     ): void {
+        $request = $createRequest();
         $this->assertEquals($expectedPhone, $request->phone());
         $this->assertEquals($expectedIpn, $request->ipn());
         $this->assertEquals($expectedCategories, $request->categories());
@@ -32,14 +33,14 @@ class RequestTest extends TestCase
     {
         return [
             'phone only' => [
-                Request::byPhone(self::TEST_PHONE),
+                fn() => Request::byPhone(self::TEST_PHONE),
                 self::TEST_PHONE,
                 null,
                 [],
                 ['phone' => self::TEST_PHONE],
             ],
             'phone with categories' => [
-                Request::byPhone(
+                fn() => Request::byPhone(
                     self::TEST_PHONE,
                     Category::FRAUD,
                     Category::GAMING
@@ -53,14 +54,14 @@ class RequestTest extends TestCase
                 ],
             ],
             'ipn only' => [
-                Request::byIpn(self::TEST_IPN),
+                fn() => Request::byIpn(self::TEST_IPN),
                 null,
                 self::TEST_IPN,
                 [],
                 ['ipn' => self::TEST_IPN],
             ],
             'ipn with categories' => [
-                Request::byIpn(
+                fn() => Request::byIpn(
                     self::TEST_IPN,
                     Category::MILITARY,
                     Category::DEAD
@@ -74,7 +75,7 @@ class RequestTest extends TestCase
                 ],
             ],
             'phone and ipn' => [
-                Request::byPhoneOrIpn(self::TEST_PHONE, self::TEST_IPN),
+                fn() => Request::byPhoneOrIpn(self::TEST_PHONE, self::TEST_IPN),
                 self::TEST_PHONE,
                 self::TEST_IPN,
                 [],
@@ -84,7 +85,7 @@ class RequestTest extends TestCase
                 ],
             ],
             'phone and ipn with categories' => [
-                Request::byPhoneOrIpn(
+                fn() => Request::byPhoneOrIpn(
                     self::TEST_PHONE,
                     self::TEST_IPN,
                     Category::FRAUD,
