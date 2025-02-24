@@ -75,7 +75,7 @@ class Record
         return $this->category;
     }
 
-    public function addedAt(): DateTimeImmutable
+    public function addedAt(): ?DateTimeImmutable
     {
         return $this->addedAt;
     }
