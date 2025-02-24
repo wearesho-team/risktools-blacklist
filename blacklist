@@ -1,0 +1,20 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use Wearesho\RiskTools\Blacklist\Console\SearchCommand;
+use Wearesho\RiskTools\Blacklist\Service\Builder;
+use Dotenv\Dotenv;
+
+$dotenv = Dotenv::createUnsafeImmutable(__DIR__);
+$dotenv->safeLoad();
+$dotenv->required(['RISK_TOOLS_BLACKLIST_AUTH_KEY', 'RISK_TOOLS_BLACKLIST_API_URL']);
+
+
+$application = new Application('RiskTools Blacklist CLI', '1.0.0');
+$application->add(new SearchCommand(Builder::create()->getService()));
+$application->run();
