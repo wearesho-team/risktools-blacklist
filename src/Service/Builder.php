@@ -8,6 +8,7 @@ use Wearesho\RiskTools\Blacklist\EnvironmentConfig;
 use Wearesho\RiskTools\Blacklist\ConfigInterface;
 use Wearesho\RiskTools\Blacklist\Service;
 use Wearesho\RiskTools\Blacklist\Search;
+use Wearesho\RiskTools\Blacklist\Update;
 use Wearesho\RiskTools\Blacklist\Client;
 use GuzzleHttp;
 
@@ -45,7 +46,8 @@ class Builder
                 config: $this->config ?? new EnvironmentConfig(),
                 httpClient: $this->httpClient ?? new GuzzleHttp\Client(),
             ),
-            new Search\Factory()
+            new Search\Factory(),
+            new Update\Factory()
         );
     }
 }

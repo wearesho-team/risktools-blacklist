@@ -11,44 +11,64 @@ use Wearesho\RiskTools\Blacklist\{
     Client,
     Endpoint,
     Category,
-    Search\Factory,
+    Search\Factory as SearchFactory,
     Search\Request,
-    Search\Response,
+    Search\Response as SearchResponse,
+    Update\Factory as UpdateFactory,
+    Update\Record,
+    Update\Response as UpdateResponse
 };
+use DateTimeImmutable;
 
 class ServiceTest extends TestCase
 {
     private Service $service;
     private Client&MockObject $client;
-    private Factory&MockObject $searchFactory;
-    private Request $request;
-    private array $apiResponse;
-    private Response&MockObject $response;
+    private SearchFactory&MockObject $searchFactory;
+    private UpdateFactory&MockObject $updateFactory;
+    private Request $searchRequest;
+    private array $searchApiResponse;
+    private SearchResponse&MockObject $searchResponse;
+    private array $records;
+    private array $updateApiResponse;
+    private UpdateResponse&MockObject $updateResponse;
 
     protected function setUp(): void
     {
         $this->client = $this->createMock(Client::class);
-        $this->searchFactory = $this->createMock(Factory::class);
-        $this->service = new Service($this->client, $this->searchFactory);
+        $this->searchFactory = $this->createMock(SearchFactory::class);
+        $this->updateFactory = $this->createMock(UpdateFactory::class);
 
-        $this->request = Request::byPhone('380501234567', Category::MILITARY);
+        $this->service = new Service(
+            $this->client,
+            $this->searchFactory,
+            $this->updateFactory
+        );
 
-        $this->apiResponse = [
+        $this->searchRequest = Request::byPhone('380501234567', Category::MILITARY);
+
+        $this->searchApiResponse = [
             'records' => [
                 [
                     'phone' => '380501234567',
-                    'ipn' => null,
                     'category' => 'military',
                     'added_at' => '2023-06-25T21:30:24+03:00',
-                    'partner_id' => '87613',
                 ],
             ],
-            'found' => 1,
-            'partners' => ['87613'],
-            'categories' => ['military' => 1],
         ];
 
-        $this->response = $this->createMock(Response::class);
+        $this->searchResponse = $this->createMock(SearchResponse::class);
+
+        $this->records = [
+            Record::withPhone('380501234567', Category::MILITARY),
+            Record::withIpn('1234567890', Category::FRAUD, new DateTimeImmutable()),
+        ];
+
+        $this->updateApiResponse = [
+            'errors' => []
+        ];
+
+        $this->updateResponse = $this->createMock(UpdateResponse::class);
     }
 
     public function testSearch(): void
@@ -58,22 +78,48 @@ class ServiceTest extends TestCase
             ->method('request')
             ->with(
                 $this->equalTo(Endpoint::Search),
-                $this->equalTo($this->request->toArray())
+                $this->equalTo($this->searchRequest->toArray())
             )
-            ->willReturn($this->apiResponse);
+            ->willReturn($this->searchApiResponse);
 
         $this->searchFactory
             ->expects($this->once())
             ->method('createResponse')
-            ->with($this->equalTo($this->apiResponse))
-            ->willReturn($this->response);
+            ->with($this->equalTo($this->searchApiResponse))
+            ->willReturn($this->searchResponse);
 
-        $result = $this->service->search($this->request);
+        $result = $this->service->search($this->searchRequest);
 
-        $this->assertSame($this->response, $result);
+        $this->assertSame($this->searchResponse, $result);
     }
 
-    public function testSearchWithClientError(): void
+    public function testUpdate(): void
+    {
+        $expectedRequestData = [
+            'records' => array_map(fn(Record $r) => $r->toArray(), $this->records)
+        ];
+
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->with(
+                $this->equalTo(Endpoint::Update),
+                $this->equalTo($expectedRequestData)
+            )
+            ->willReturn($this->updateApiResponse);
+
+        $this->updateFactory
+            ->expects($this->once())
+            ->method('createResponse')
+            ->with($this->equalTo($this->updateApiResponse))
+            ->willReturn($this->updateResponse);
+
+        $result = $this->service->update($this->records);
+
+        $this->assertSame($this->updateResponse, $result);
+    }
+
+    public function testUpdateWithClientError(): void
     {
         $exception = new \RuntimeException('API Error');
 
@@ -82,31 +128,31 @@ class ServiceTest extends TestCase
             ->method('request')
             ->willThrowException($exception);
 
-        $this->searchFactory
+        $this->updateFactory
             ->expects($this->never())
             ->method('createResponse');
 
         $this->expectExceptionObject($exception);
 
-        $this->service->search($this->request);
+        $this->service->update($this->records);
     }
 
-    public function testSearchWithFactoryError(): void
+    public function testUpdateWithFactoryError(): void
     {
         $exception = new \RuntimeException('Factory Error');
 
         $this->client
             ->expects($this->once())
             ->method('request')
-            ->willReturn($this->apiResponse);
+            ->willReturn($this->updateApiResponse);
 
-        $this->searchFactory
+        $this->updateFactory
             ->expects($this->once())
             ->method('createResponse')
             ->willThrowException($exception);
 
         $this->expectExceptionObject($exception);
 
-        $this->service->search($this->request);
+        $this->service->update($this->records);
     }
 }
