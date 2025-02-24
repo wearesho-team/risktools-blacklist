@@ -172,16 +172,16 @@ use Wearesho\RiskTools\Blacklist\Search\Request;
 use Wearesho\RiskTools\Blacklist\Category;
 
 // Пошук за номером телефону
-$request = Request::phone('380501234567');
+$request = Request::byPhone('380501234567');
 
 // Пошук за ІПН
-$request = Request::ipn('1234567890');
+$request = Request::byIpn('1234567890');
 
 // Пошук за номером телефону та ІПН одночасно
-$request = Request::phoneOrIpn('380501234567', '1234567890');
+$request = Request::byPhoneOrIpn('380501234567', '1234567890');
 
 // Пошук з фільтрацією за категоріями
-$request = Request::phone(
+$request = Request::byPhone(
     '380501234567',
     Category::MILITARY,
     Category::FRAUD
@@ -261,12 +261,13 @@ $record = Record::withPhoneAndIpn(
 
 ```php
 use Wearesho\RiskTools\Blacklist\Exception;
+use Wearesho\RiskTools\Blacklist\Update\Record;
 
 // Формування масиву записів
 $records = [
-    Record::wi("380501234567", Category::MILITARY),
-    Record::ipn("1234567890", Category::FRAUD),
-    Record::phoneAndIpn(
+    Record::withPhone("380501234567", Category::MILITARY),
+    Record::withIpn("1234567890", Category::FRAUD),
+    Record::withPhoneAndIpn(
         "380507654321",
         "0987654321",
         Category::CIRCLE,
