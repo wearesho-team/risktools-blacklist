@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Wearesho\RiskTools\Blacklist\Search;
 
+use DateTimeImmutable;
+use Wearesho\RiskTools\Blacklist\Category;
+
 class Record
 {
     public function __construct(
         private readonly ?string $ipn,
         private readonly ?string $phone,
-        private readonly string $category,
-        private readonly \DateTimeImmutable $addedAt,
+        private readonly Category $category,
+        private readonly DateTimeImmutable $addedAt,
         private readonly string $partnerId,
     ) {
     }
@@ -25,12 +28,12 @@ class Record
         return $this->phone;
     }
 
-    public function category(): string
+    public function category(): Category
     {
         return $this->category;
     }
 
-    public function addedAt(): \DateTimeImmutable
+    public function addedAt(): DateTimeImmutable
     {
         return $this->addedAt;
     }
