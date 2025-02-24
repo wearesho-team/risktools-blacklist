@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7873ee9431b525de8d0e5e405fd7eeb4",
+    "content-hash": "f2fbc5d842ea76c348876f78f79aab31",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -330,6 +330,50 @@
                 }
             ],
             "time": "2024-07-18T11:15:46+00:00"
+        },
+        {
+            "name": "horat1us/environment-config",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Horat1us/environment-config.git",
+                "reference": "85fececa18f1873f9f89273326e2956b93657a07"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Horat1us/environment-config/zipball/85fececa18f1873f9f89273326e2956b93657a07",
+                "reference": "85fececa18f1873f9f89273326e2956b93657a07",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Horat1us\\Environment\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Letnikow",
+                    "email": "reclamme@gmail.com"
+                }
+            ],
+            "description": "Environment Config class",
+            "support": {
+                "issues": "https://github.com/Horat1us/environment-config/issues",
+                "source": "https://github.com/Horat1us/environment-config/tree/1.5.0"
+            },
+            "time": "2022-10-21T13:30:25+00:00"
         },
         {
             "name": "psr/http-client",
@@ -2318,7 +2362,9 @@
     "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {},
+    "platform": {
+        "php": ">=8.1"
+    },
     "platform-dev": {},
     "platform-overrides": {
         "php": "8.1"
