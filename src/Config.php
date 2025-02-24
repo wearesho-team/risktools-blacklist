@@ -9,8 +9,7 @@ class Config implements ConfigInterface
     public function __construct(
         public readonly string $authKey,
         public readonly string $apiUrl
-    )
-    {
+    ) {
     }
 
     public function getAuthKey(): string

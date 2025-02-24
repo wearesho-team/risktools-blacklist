@@ -18,10 +18,9 @@ class Client
     private const RESPONSE_STATUS_OK = 'ok';
 
     public function __construct(
-        private readonly ConfigInterface            $config,
+        private readonly ConfigInterface $config,
         private readonly GuzzleHttp\ClientInterface $httpClient
-    )
-    {
+    ) {
     }
 
     /**
