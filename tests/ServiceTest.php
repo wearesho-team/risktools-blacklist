@@ -6,6 +6,7 @@ namespace Wearesho\RiskTools\Blacklist\Tests;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Wearesho\RiskTools\Blacklist\{
     Service,
     Client,
@@ -28,10 +29,10 @@ class ServiceTest extends TestCase
     private UpdateFactory&MockObject $updateFactory;
     private Request $searchRequest;
     private array $searchApiResponse;
-    private SearchResponse&MockObject $searchResponse;
+    private SearchResponse&Stub $searchResponse;
     private array $records;
     private array $updateApiResponse;
-    private UpdateResponse&MockObject $updateResponse;
+    private UpdateResponse&Stub $updateResponse;
 
     protected function setUp(): void
     {
@@ -57,7 +58,7 @@ class ServiceTest extends TestCase
             ],
         ];
 
-        $this->searchResponse = $this->createMock(SearchResponse::class);
+        $this->searchResponse = $this->createStub(SearchResponse::class);
 
         $this->records = [
             Record::withPhone('380501234567', Category::MILITARY),
@@ -68,7 +69,7 @@ class ServiceTest extends TestCase
             'errors' => []
         ];
 
-        $this->updateResponse = $this->createMock(UpdateResponse::class);
+        $this->updateResponse = $this->createStub(UpdateResponse::class);
     }
 
     public function testSearch(): void
@@ -87,6 +88,10 @@ class ServiceTest extends TestCase
             ->method('createResponse')
             ->with($this->equalTo($this->searchApiResponse))
             ->willReturn($this->searchResponse);
+
+        $this->updateFactory
+            ->expects($this->never())
+            ->method('createResponse');
 
         $result = $this->service->search($this->searchRequest);
 
@@ -114,6 +119,10 @@ class ServiceTest extends TestCase
             ->with($this->equalTo($this->updateApiResponse))
             ->willReturn($this->updateResponse);
 
+        $this->searchFactory
+            ->expects($this->never())
+            ->method('createResponse');
+
         $result = $this->service->update($this->records);
 
         $this->assertSame($this->updateResponse, $result);
@@ -129,6 +138,10 @@ class ServiceTest extends TestCase
             ->willThrowException($exception);
 
         $this->updateFactory
+            ->expects($this->never())
+            ->method('createResponse');
+
+        $this->searchFactory
             ->expects($this->never())
             ->method('createResponse');
 
@@ -150,6 +163,10 @@ class ServiceTest extends TestCase
             ->expects($this->once())
             ->method('createResponse')
             ->willThrowException($exception);
+
+        $this->searchFactory
+            ->expects($this->never())
+            ->method('createResponse');
 
         $this->expectExceptionObject($exception);
 

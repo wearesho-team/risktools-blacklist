@@ -19,8 +19,8 @@ class ResponseTest extends TestCase
     protected function setUp(): void
     {
         $this->records = [
-            $this->createMock(Record::class),
-            $this->createMock(Record::class),
+            $this->createStub(Record::class),
+            $this->createStub(Record::class),
         ];
         $this->found = 2;
         $this->partners = ['01933', '87613'];

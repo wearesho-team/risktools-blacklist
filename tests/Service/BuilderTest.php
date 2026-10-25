@@ -15,13 +15,13 @@ use GuzzleHttp;
 class BuilderTest extends TestCase
 {
     private Builder $builder;
-    private ConfigInterface&\PHPUnit\Framework\MockObject\MockObject $config;
-    private GuzzleHttp\ClientInterface&\PHPUnit\Framework\MockObject\MockObject $httpClient;
+    private ConfigInterface&\PHPUnit\Framework\MockObject\Stub $config;
+    private GuzzleHttp\ClientInterface&\PHPUnit\Framework\MockObject\Stub $httpClient;
 
     protected function setUp(): void
     {
-        $this->config = $this->createMock(ConfigInterface::class);
-        $this->httpClient = $this->createMock(GuzzleHttp\ClientInterface::class);
+        $this->config = $this->createStub(ConfigInterface::class);
+        $this->httpClient = $this->createStub(GuzzleHttp\ClientInterface::class);
         $this->builder = new Builder();
     }
 
