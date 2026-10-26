@@ -44,8 +44,10 @@
 ## Встановлення
 
 ```bash
-composer require wearesho-team/risktools-blacklist
+composer require wearesho-team/risktools-blacklist:^1.1
 ```
+
+Сумісність: протестовано на PHP 8.4, PHP 8.5
 
 ## Конфігурація
 

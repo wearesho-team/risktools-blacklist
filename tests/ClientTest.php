@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
 use GuzzleHttp\RequestOptions;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
@@ -23,12 +24,12 @@ class ClientTest extends TestCase
     private const TEST_API_URL = 'https://api.example.com';
 
     private Client $client;
-    private MockObject&ConfigInterface $config;
+    private Stub&ConfigInterface $config;
     private MockObject&ClientInterface $httpClient;
 
     protected function setUp(): void
     {
-        $this->config = $this->createMock(ConfigInterface::class);
+        $this->config = $this->createStub(ConfigInterface::class);
         $this->config->method('getAuthKey')->willReturn(self::TEST_AUTH_KEY);
         $this->config->method('getApiUrl')->willReturn(self::TEST_API_URL);
 
@@ -43,8 +44,8 @@ class ClientTest extends TestCase
         array $responseData,
         array $expectedResult
     ): void {
-        $response = $this->createMock(ResponseInterface::class);
-        $stream = $this->createMock(StreamInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
+        $stream = $this->createStub(StreamInterface::class);
 
         $stream->method('__toString')
             ->willReturn(json_encode($responseData));
@@ -103,6 +104,7 @@ class ClientTest extends TestCase
         string $expectedMessage
     ): void {
         $this->httpClient
+            ->expects($this->once())
             ->method('request')
             ->willThrowException($exception);
 
@@ -134,8 +136,8 @@ class ClientTest extends TestCase
         string $responseBody,
         string $expectedMessage
     ): void {
-        $response = $this->createMock(ResponseInterface::class);
-        $stream = $this->createMock(StreamInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
+        $stream = $this->createStub(StreamInterface::class);
 
         $stream->method('__toString')
             ->willReturn($responseBody);
@@ -144,6 +146,7 @@ class ClientTest extends TestCase
             ->willReturn($stream);
 
         $this->httpClient
+            ->expects($this->once())
             ->method('request')
             ->willReturn($response);
 

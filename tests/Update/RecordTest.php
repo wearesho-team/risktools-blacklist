@@ -32,7 +32,6 @@ class RecordTest extends TestCase
         // Используем рефлексию для тестирования приватного конструктора
         $reflection = new \ReflectionClass(Record::class);
         $constructor = $reflection->getConstructor();
-        $constructor->setAccessible(true);
         $record = $reflection->newInstanceWithoutConstructor();
         $constructor->invoke($record, $this->category, $this->date, null, null);
     }
